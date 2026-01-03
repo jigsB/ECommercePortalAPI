@@ -3,8 +3,11 @@ using ECommercePortal.Infrastructure.Persistence;
 using HotChocolate.Authorization;
 using System.Security.Claims;
 using ECommercePortal.Domain.Entities;
+using ECommercePortal.API.GraphQL.Queries;
+using ECommercePortal.API.GraphQL.Mutations;
 namespace ECommercePortal.API.GraphQL.Product
 {
+    [ExtendObjectType(typeof(Mutation))]
     public class ProductMutations
     {
         [Authorize(Roles = new[] { "StoreOwner" })]

@@ -6,9 +6,9 @@ using System.Text;
 namespace ECommercePortal.Application.DTOs
 {
     public record CreateUserInput(
-      string Email,
-      string Password,
-      UserRole Role
-    );
+  string FullName,
+  string Email,
+  string Password,
+  int RoleId);
 
 }

@@ -3,10 +3,14 @@ using System.Security.Claims;
 
 namespace ECommercePortal.API.GraphQL.Queries
 {
+
+    [ExtendObjectType(typeof(Query))]
     public class UserQuery
     {
-        [Authorize]
+        
         public string Me(ClaimsPrincipal user)
-        => user.FindFirstValue(ClaimTypes.Email);
+        {
+            return user.FindFirstValue(ClaimTypes.Email);
+        }
     }
 }

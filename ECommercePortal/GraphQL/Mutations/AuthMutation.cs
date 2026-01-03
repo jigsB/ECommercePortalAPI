@@ -4,6 +4,7 @@ using ECommercePortal.Infrastructure.Security;
 
 namespace ECommercePortal.API.GraphQL.Mutations
 {
+    [ExtendObjectType(typeof(Mutation))]
     public class AuthMutation
     {
         public async Task<string> Login(

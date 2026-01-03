@@ -1,19 +1,21 @@
 using ECommercePortal.API.GraphQL.Mutations;
-using ECommercePortal.API.GraphQL.Product;
 using ECommercePortal.API.GraphQL.Queries;
-using ECommercePortal.API.GraphQL.Types;
+using ECommercePortal.Application;
+using ECommercePortal.Infrastructure;
 using ECommercePortal.Infrastructure.Persistence;
-using HotChocolate.AspNetCore;
-using HotChocolate.AspNetCore.Playground;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HotChocolate.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
 //using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
+
+// ASP.NET authorization
+builder.Services.AddAuthorization();
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 #region Database
 //builder.Services.AddDbContext<AppDbContext>(options =>
@@ -22,42 +24,20 @@ IConfiguration configuration = builder.Configuration;
 var connectionString = builder.Configuration
     .GetConnectionString("DefaultConnection");
 
-builder.Services.AddPooledDbContextFactory<AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 #endregion
 
-#region Authentication (JWT)
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!)
-            )
-        };
-    });
 
-builder.Services.AddAuthorization();
-#endregion
 
 #region GraphQL
 builder.Services
     .AddGraphQLServer()
-    .AddAuthorizationCore()
-    .AddQueryType<ProductQueries>()
-    .AddMutationType<ProductMutations>()
-    .AddType<ProductType>()
-    .AddQueryType<UserQuery>()
-    .AddMutationType<UserMutation>()
-    .AddType<UserType>()
+    .AddAuthorization().
+     AddQueryType<Query>()
+    .AddMutationType<Mutation>()
+    .AddTypeExtension<UserMutation>()
     .AddFiltering()
     .AddSorting();
 #endregion
@@ -69,8 +49,8 @@ var app = builder.Build();
 #region Middleware
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
 app.UseAuthorization();
+//app.UseAuthentication();
 
 app.MapGraphQL("/graphql");
 

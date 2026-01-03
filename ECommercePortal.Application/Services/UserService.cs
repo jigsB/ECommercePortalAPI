@@ -25,9 +25,10 @@ namespace ECommercePortal.Application.Services
             var user = new User
             {
                 UserId = Guid.NewGuid(),
+                FullName = input.FullName,
                 Email = input.Email,
-                PasswordHash = PasswordHasher.Hash(input.Password),
-               // Role = 1, // Assuming Role is an integer representing UserRole
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(input.Password),
+                RoleId = input.RoleId
             };
 
             await _repo.AddAsync(user);
