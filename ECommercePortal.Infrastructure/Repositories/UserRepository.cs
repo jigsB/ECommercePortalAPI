@@ -23,6 +23,7 @@ namespace ECommercePortal.Infrastructure.Repositories
                      u.UserId,
                      u.FullName,
                      u.Email,
+                     u.PasswordHash,
                      RoleName = u.Role.RoleName
                  })
      .FirstOrDefaultAsync();
@@ -30,6 +31,8 @@ namespace ECommercePortal.Infrastructure.Repositories
             {
                 UserId = user.UserId,
                 FullName = user.FullName,
+                Email = user.Email,
+                PasswordHash = user.PasswordHash,
                 Role = user?.RoleName is not null ? new Role { RoleName = user.RoleName } : null,
             };
         }

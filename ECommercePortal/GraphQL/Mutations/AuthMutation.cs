@@ -1,4 +1,6 @@
-﻿using ECommercePortal.Application.DTOs;
+﻿using ECommercePortal.API.GraphQL.Types;
+using ECommercePortal.Application.DTOs;
+using ECommercePortal.Domain.Entities;
 using ECommercePortal.Infrastructure.Repositories.Interfaces;
 using ECommercePortal.Infrastructure.Security;
 
@@ -7,7 +9,7 @@ namespace ECommercePortal.API.GraphQL.Mutations
     [ExtendObjectType(typeof(Mutation))]
     public class AuthMutation
     {
-        public async Task<string> Login(
+        public async Task<UserViewType> Login(
         LoginInput input,
         [Service] IUserRepository repo,
         [Service] JwtService jwt)
@@ -18,7 +20,28 @@ namespace ECommercePortal.API.GraphQL.Mutations
             if (!PasswordHasher.Verify(input.Password, user.PasswordHash))
                 throw new GraphQLException("Invalid credentials");
 
-            return jwt.GenerateToken(user);
+            var token = jwt.GenerateToken(user);
+
+            //return new UserViewType()
+            //{
+            //    Token= token,
+            //    User =
+            //    {
+            //          user.userId
+            //    }
+            //};
+            return new UserViewType()
+            {
+                Token = token,
+                User = new UserType
+                {
+                    UserId = user.UserId,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    Role = user?.Role.RoleName ?? "User"
+                }
+            };
+
         }
     }
 }
