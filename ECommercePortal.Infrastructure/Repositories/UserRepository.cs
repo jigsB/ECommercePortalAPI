@@ -1,5 +1,4 @@
 ﻿using ECommercePortal.Domain.Entities;
-using ECommercePortal.Domain.Response;
 using ECommercePortal.Infrastructure.Persistence;
 using ECommercePortal.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
