@@ -1,4 +1,5 @@
 ﻿using ECommercePortal.Domain.Entities;
+using ECommercePortal.Domain.Response;
 
 namespace ECommercePortal.Infrastructure.Repositories.Interfaces
 {

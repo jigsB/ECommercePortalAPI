@@ -1,6 +1,7 @@
 ﻿using ECommercePortal.Infrastructure.Persistence;
 using ECommercePortal.Infrastructure.Repositories;
 using ECommercePortal.Infrastructure.Repositories.Interfaces;
+using ECommercePortal.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ namespace ECommercePortal.Infrastructure
             //    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<JwtService>();
+
             return services;
         }
     }
