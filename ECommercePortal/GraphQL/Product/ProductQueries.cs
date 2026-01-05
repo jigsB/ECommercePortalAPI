@@ -1,9 +1,11 @@
-﻿using ECommercePortal.Domain.Entities;
+﻿using ECommercePortal.API.GraphQL.Queries;
+using ECommercePortal.Domain.Entities;
 using ECommercePortal.Infrastructure.Persistence;
 using HotChocolate.Authorization;
 
 namespace ECommercePortal.API.GraphQL.Product
 {
+    [ExtendObjectType(typeof(Query))]
     public class ProductQueries
     {
         [AllowAnonymous]
