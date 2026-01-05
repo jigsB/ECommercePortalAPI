@@ -1,4 +1,5 @@
-﻿using ECommercePortal.Infrastructure.Persistence;
+﻿using ECommercePortal.Domain.Entities;
+using ECommercePortal.Infrastructure.Persistence;
 using HotChocolate.Authorization;
 
 namespace ECommercePortal.API.GraphQL.Product
@@ -6,17 +7,18 @@ namespace ECommercePortal.API.GraphQL.Product
     public class ProductQueries
     {
         [AllowAnonymous]
-        public IQueryable<Domain.Entities.ProductDetail> GetProducts(
+        public IQueryable<ProductDetail> GetAllProducts(
         [Service] AppDbContext context)
-        {
-            return context.Products.Where(p => p.IsActive);
-        }
+        => context.Products.Where(p => p.IsActive);
 
-        public Domain.Entities.ProductDetail? GetProductById(
+        public IQueryable<ProductDetail> GetOwnersProducts(
+            Guid ownerId,
+        [Service] AppDbContext context)
+        => context.Products.Where(p => p.IsActive && p.ProductOwnerId == ownerId);
+
+        public ProductDetail? GetProductById(
             Guid productId,
             [Service] AppDbContext context)
-        {
-            return context.Products.FirstOrDefault(p => p.ProductId == productId);
-        }
+            => context.Products.FirstOrDefault(p => p.ProductId == productId);
     }
 }

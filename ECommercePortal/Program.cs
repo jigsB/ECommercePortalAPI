@@ -1,4 +1,5 @@
 ﻿using ECommercePortal.API.GraphQL.Mutations;
+using ECommercePortal.API.GraphQL.Product;
 using ECommercePortal.API.GraphQL.Queries;
 using ECommercePortal.Application;
 using ECommercePortal.Infrastructure;
@@ -37,26 +38,19 @@ builder.Services.AddCors(options =>
                                  .AllowAnyMethod();
                       });
 });
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowAngular",
-//        policy =>
-//        {
-//            policy
-//                .WithOrigins("http://localhost:4200")
-//                .AllowAnyHeader()
-//                .AllowAnyMethod()
-//                .AllowCredentials();
-//        });
-//});
+
 #region GraphQL
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization().
      AddQueryType<Query>()
     .AddMutationType<Mutation>()
+    .AddType<ProductType>()
     .AddTypeExtension<UserMutation>()
     .AddTypeExtension<AuthMutation>()
+    .AddTypeExtension<ProductMutations>()
+    .AddTypeExtension<ProductQueries>()
+    
     .AddFiltering()
     .AddSorting();
 #endregion

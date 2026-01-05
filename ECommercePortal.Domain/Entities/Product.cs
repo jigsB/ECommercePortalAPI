@@ -27,7 +27,7 @@ namespace ECommercePortal.Domain.Entities
 
         public bool IsActive { get; set; } = true;
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }

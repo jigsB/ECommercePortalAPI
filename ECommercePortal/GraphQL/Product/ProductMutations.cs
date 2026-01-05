@@ -10,29 +10,23 @@ namespace ECommercePortal.API.GraphQL.Product
     [ExtendObjectType(typeof(Mutation))]
     public class ProductMutations
     {
-        [Authorize(Roles = new[] { "StoreOwner" })]
-        public async Task<ProductDetail> CreateProduct(
+        //[Authorize(Roles = new[] { "StoreOwner" })]
+        public async Task<ProductDetail> AddProduct(
         CreateProductInput input,
-        ClaimsPrincipal user,
         [Service] AppDbContext context)
         {
-            var userId = Guid.Parse(user.FindFirst("UserId")!.Value);
-
             var product = new ProductDetail
             {
                 ProductId = Guid.NewGuid(),
-                ProductOwnerId = userId,
+                ProductOwnerId = input.ProductOwnerId,
                 ProductName = input.ProductName,
                 Description = input.Description,
                 Price = input.Price,
-                StockQuantity = input.StockQuantity,
-                IsActive = true,
-                CreatedOn = DateTime.UtcNow
+                StockQuantity = input.StockQuantity
             };
 
             context.Products.Add(product);
             await context.SaveChangesAsync();
-
             return product;
         }
 
