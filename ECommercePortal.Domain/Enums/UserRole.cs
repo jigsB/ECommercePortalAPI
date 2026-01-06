@@ -6,7 +6,7 @@ namespace ECommercePortal.Domain.Enums
 {
     public enum UserRole
     {
-        StoreOwner,
-        Buyer
+        StoreOwner = 1,
+        Buyer = 2
     }
 }
